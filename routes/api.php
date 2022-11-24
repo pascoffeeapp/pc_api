@@ -22,7 +22,7 @@ Route::prefix('auth')->group(function() {
     Route::post('register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('login', [AuthController::class, 'login'])->name('auth.login');
     Route::get('unauthorized', [AuthController::class, 'unauthorized'])->name('auth.unauthorized');
-    Route::get('me', [AuthController::class, 'me'])->name('auth.me');
+    Route::get('me', [AuthController::class, 'me'])->name('auth.me')->middleware(['auth:sanctum']);
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 });
