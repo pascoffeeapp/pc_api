@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ class AuthController extends Controller
             "username" => "required|unique:users,username",
             "password" => "required",
             "confirm_password" => "required|same:password",
+            "role_id" => "required|exists:roles,id",
         ]);
 
         if ($val->fails()) {

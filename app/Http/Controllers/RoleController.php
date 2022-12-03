@@ -26,7 +26,7 @@ class RoleController extends Controller
             return response()->json([
                 "status" => true,
                 "message" => "Role successfully loaded",
-                "body" => $role->toArray(),
+                "body" => $role->getData(),
             ], 200);
         }
         return response()->json([
@@ -65,28 +65,27 @@ class RoleController extends Controller
             "name" => "required",
         ]);
 
-        if ($val->fails()) {
-            return response()->json([
-                "status" => false,
-                "message" => "Invalid field",
-                "body" => $val->errors(),
-            ], 403);
-        }
-
         $role = Role::find($id);
         if ($role) {
-            $role->update([
-                "name" => strtolower($request->name),
-            ]);
+            $rp = RolePermission::where('role_id', $role->id)->get();
+            foreach ($rp as $r) $r->delete();
+            if ($request->permissions) {
+                foreach ($request->permissions as $permission_id) {
+                    RolePermission::create([
+                        "role_id" => $role->id,
+                        "permission_id" => $permission_id,
+                    ]);
+                }
+            }
             return response()->json([
                 "status" => true,
-                "message" => "Role successfully updated",
-                "body" => $role->toArray(),
+                "message" => "Role berhasil diubah",
+                "body" => $role->getData(),
             ], 200);
         }
         return response()->json([
             "status" => false,
-            "message" => "Role note found",
+            "message" => "Role tidak ditemukan",
             "body" => [],
         ], 404);
     }
@@ -108,27 +107,5 @@ class RoleController extends Controller
             "body" => [],
         ], 404);
     }
-
-    public function updatePermission(Request $request, $id) {
-        $role = Role::find($id);
-        if ($role) {
-            $permissions = RolePermission::where('role_id', $role->id)->get();
-            foreach ($permissions as $permission) $permission->delete();
-            if ($request->permissions) {
-                foreach ($request->permissions as $permission_id) {
-                    RolePermission::create([
-                        "role_id" => $role->id,
-                        "permission_id" => $permission_id,
-                    ]);
-                }
-            }
-            return response()->json([
-                "status" => true,
-                "message" => "Role note found",
-                "body" => [],
-            ], 200);
-        }
-    }
-
 
 }

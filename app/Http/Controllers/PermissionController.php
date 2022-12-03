@@ -61,7 +61,7 @@ class PermissionController extends Controller
         if ($permission) {
 
             $permission = Permission::update($request->only('key', 'description'));
-
+            
             return response()->json([
                 "status" => true,
                 "message" => "Izin berhasil diperbaharui",

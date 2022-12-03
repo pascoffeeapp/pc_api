@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('status');
             $table->timestamps();
 
-            $table->foreign('outlet_id')->references('id')->on('outlets');
+            $table->foreign('outlet_id')->references('id')->on('outlets')->cascadeOnDelete();
         });
     }
 

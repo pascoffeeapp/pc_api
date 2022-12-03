@@ -28,4 +28,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function getRole() {
+        return Role::where('id', $this->role_id)->first();
+    }
+
+    public function hasPermission(string $name) {
+        $role = $this->getRole();
+        if ($role) {
+            return $role->hasPermission($name);
+        }
+        return false;
+    }
+
 }

@@ -1,0 +1,7 @@
+{
+    "api.role.index": "Melihat daftar role yang ada",
+    "api.role.show": "Melihat daftar role yang ada",
+    "api.role.store": "Melihat daftar role yang ada",
+    "api.role.update": "Melihat daftar role yang ada",
+    "api.role.destroy": "Melihat daftar role yang ada"
+}

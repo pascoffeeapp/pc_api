@@ -10,4 +10,8 @@ class Menu extends Model
     use HasFactory;
 
     public $table = 'menu';
+
+    public $fillable = [
+        'outlet_id', 'name', 'image', 'description', 'price', 'status'
+    ];
 }

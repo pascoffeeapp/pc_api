@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Validator;
 class OutletController extends Controller
 {
     public function index() {
-        $outlets = Outlet::all();
+        $outlets = Outlet::selectRaw('outlets.id, outlets.name, image, description, users.username as owner')
+        ->join('users', 'users.id', '=', 'outlets.owner_id')->get();
         $data['outlets'] = $outlets;
         return response()->json([
             "status" => true,
@@ -25,7 +26,7 @@ class OutletController extends Controller
             return response()->json([
                 "status" => true,
                 "message" => "Berhasil memuat gerai",
-                "body" => $outlet,
+                "body" => $outlet->getData(),
             ], 200);
         }
         return response()->json([
@@ -51,8 +52,9 @@ class OutletController extends Controller
         }
         $filename = '';
         if ($file = $request->file('image')) {
-            $dir = '/uploads/';
+            $dir = 'uploads/outlet';
             $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
+            // dd($filename);
             $file->move($dir, $filename);
         }
         $outlet = Outlet::create([
@@ -63,7 +65,7 @@ class OutletController extends Controller
         ]);
         return response()->json([
             "status" => true,
-            "message" => "Berhasil memuat gerai",
+            "message" => "Berhasil menambah gerai",
             "body" => $outlet,
         ], 200);
     }
@@ -71,7 +73,7 @@ class OutletController extends Controller
     public function update(Request $request, $id) {
         $val = Validator::make($request->all(), [
             "name" => "required",
-            "image" => "required|image",
+            // "image" => "required|image",
             "description" => "required",
             "owner_id" => "required|exists:users,id",
         ]);
@@ -85,7 +87,7 @@ class OutletController extends Controller
         $outlet = Outlet::find($id);
         $filename = $outlet->image;
         if ($file = $request->file('image')) {
-            $dir = '/uploads/';
+            $dir = 'uploads/outlet';
             if (file_exists(public_path($dir.$filename))) {
                 unlink(public_path($dir.$filename));
             }
@@ -100,20 +102,30 @@ class OutletController extends Controller
         ]);
         return response()->json([
             "status" => true,
-            "message" => "Berhasil memuat gerai",
-            "body" => $outlet,
+            "message" => "Berhasil mengubah data gerai",
+            "body" => $outlet->getData(),
         ], 200);
     }
 
     public function destroy($id) {
         $outlet = Outlet::find($id);
         if ($outlet) {
+            $dir = 'uploads/outlet/';
+            $filename = $outlet->image;
+            if (file_exists(public_path($dir.$filename))) {
+                unlink(public_path($dir.$filename));
+            }
             $outlet->delete();
             return response()->json([
                 "status" => true,
-                "message" => "Berhasil memuat gerai",
+                "message" => "Berhasil menghapus gerai",
                 "body" => $outlet,
             ], 200);
         }
+        return response()->json([
+            "status" => false,
+            "message" => "Gerai tidak ditemukan",
+            "body" => [],
+        ], 404);
     }
 }
