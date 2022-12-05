@@ -1,0 +1,105 @@
+#header {
+    height: 4rem;
+    background-color: #815B5B;
+    color: #F8EDE3;
+    display: flex;
+    align-items: center;
+
+    #toggle {
+        height: 3rem;
+        width: 3rem;
+        margin: .5rem;
+        font-size: 1.5em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    #toggle:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+    }
+
+    #toggle:active {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+    }
+
+    .logo {
+        font-size: 1.5em;
+        padding-left: 1rem;
+        font-family: Merienda;
+        color: #D0B8A8;
+
+        b {
+            color: #fff;
+        }
+    }
+}
+#wrapper {
+    display: grid;
+    grid-template-columns: 18rem auto;
+    height: calc(100vh - 4rem);
+    transition: .3s;
+    
+    #sidebar {
+        background-color: #D0B8A8;
+        transition: .3s;
+        background-image: url('/src/assets/img/illustration.png');
+        background-size:  100%;
+        background-repeat: no-repeat;
+        background-position: bottom;
+        .sidebar-item {
+            text-decoration: none;
+            display: grid;
+            grid-template-columns: 4rem auto;
+            align-items: center;
+            height: 4rem;
+            width: 100%;
+            color: #594545;
+            transition: .2s;
+            border-radius: 0 8px 8px 0;
+            
+            .icon {
+                font-size: 1.5em;
+                text-align: center;
+            }
+
+            .text {
+                padding-left: 1rem;
+                font-size: 1.2em;
+                opacity: 1;
+                transition: .3s;
+            }
+        }
+        .sidebar-item:hover {
+            background-color: #F8EDE3;
+        }
+        .sidebar-item.active {
+            background-color: #594545;
+            color: #F8EDE3;
+        }
+        .devider {
+            width: 90%;
+            margin: auto;
+            border-bottom: 0.1px solid #DFD3C3;
+        }
+    }
+    #content {
+        transition: .3s;
+        background-color: #FFF8EA;
+        background-image: url('/src/assets/img/coffee_content.svg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: right bottom;
+    }
+    &.hide {
+        grid-template-columns: 4rem auto;
+        .sidebar-item {
+            .text {
+                opacity: 0;
+            }
+        }
+    }
+}
