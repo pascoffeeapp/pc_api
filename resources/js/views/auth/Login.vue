@@ -3,7 +3,7 @@
         <div class="container">
             
             <div class="left">
-                <img src="/images/Logo.svg" alt="Logo">
+                <img src="../../assets/img/Logo.svg" alt="Logo">
             </div>
     
             <div class="login">
