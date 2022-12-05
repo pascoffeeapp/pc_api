@@ -53,7 +53,7 @@
 #wrapper #sidebar {
   background-color: #E1CFC1;
   transition: 0.3s;
-  /* background-image: url("/src/assets/img/illustration.png"); */
+  background-image: url("../img/img/illustration.png");
   background-size: 70%;
   background-repeat: no-repeat;
   background-position: bottom;
@@ -95,7 +95,7 @@
 #wrapper #content {
   transition: 0.3s;
   background-color: #FFF8EA;
-  background-image: url("/src/assets/img/coffee_content.svg");
+  background-image: url("../img/img/coffee_content.svg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: right bottom;
