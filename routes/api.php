@@ -22,39 +22,66 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// 
 Route::fallback([Controller::class, 'notFound']);
 
-
+// Api untuk init role dan permission
 Route::get('init', [Controller::class, 'init']);
 
+// Auth
 Route::prefix('auth')->group(function() {
 
+    // Api untuk register
     Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+
+    // Api untuk login
     Route::post('login', [AuthController::class, 'login'])->name('auth.login');
-    Route::get('unauthorized', [AuthController::class, 'unauthorized'])->name('auth.unauthorized');
+
+    // Api untuk memuat data yg login
     Route::get('me', [AuthController::class, 'me'])->name('auth.me')->middleware(['auth:sanctum']);
+
+    // Api untuk logout
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 });
 
 Route::middleware(['auth:sanctum'])->group(function() {
 
+    // Role
     Route::prefix('role')->group(function() {
     
+        // Melihat daftar role
         Route::get('/', [RoleController::class, 'index']);
+
+        // Melihat detail role
         Route::get('/{id}', [RoleController::class, 'show']);
+
+        // Menambahkan role
         Route::post('/', [RoleController::class, 'store']);
-        Route::put('/{id}', [RoleController::class, 'update']);
+
+        // Mengedit role
+        Route::post('/{id}', [RoleController::class, 'update']);
+
+        // Menghapus role
         Route::delete('/{id}', [RoleController::class, 'destroy']);
         
     });
 
     Route::prefix('permission')->group(function() {
     
+        // Melihat daftar izin
         Route::get('/', [PermissionController::class, 'index']);
+
+        // Melihat detail izin
         Route::get('/{id}', [PermissionController::class, 'show']);
+
+        // Menambahkan izin
         Route::post('/', [PermissionController::class, 'store']);
-        Route::put('/{id}', [PermissionController::class, 'update']);
+
+        // Mengedit izin
+        Route::post('/{id}', [PermissionController::class, 'update']);
+
+        // Menghapus izin
         Route::delete('/{id}', [PermissionController::class, 'destroy']);
         
     });
@@ -62,19 +89,36 @@ Route::middleware(['auth:sanctum'])->group(function() {
     // Outlet
     Route::prefix('outlet')->group(function() {
     
+        // Melihat daftar gerai
         Route::get('/', [OutletController::class, 'index']);
+
+        // Melihat detail gerai
         Route::get('/{id}', [OutletController::class, 'show']);
+
+        // Menambahkan gerai
         Route::post('/', [OutletController::class, 'store']);
-        Route::put('/{id}', [OutletController::class, 'update'])->middleware(['outlet']);
+
+        // Mengedit gerai
+        Route::post('/{id}', [OutletController::class, 'update'])->middleware(['outlet']);
+
+        // Menghapus gerai
         Route::delete('/{id}', [OutletController::class, 'destroy'])->middleware(['outlet']);
         
         // Menu
         Route::prefix('/{outlet_id}/menu')->middleware(['outlet'])->group(function() {
         
             // Route::get('/', [MenuController::class, 'index']);
+
+            // Melihat detail menu
             Route::get('/{id}', [MenuController::class, 'show']);
+
+            // Menambah menu
             Route::post('/', [MenuController::class, 'store']);
-            Route::put('/{id}', [MenuController::class, 'update']);
+
+            // Mengedit menu
+            Route::post('/{id}', [MenuController::class, 'update']);
+
+            // Menghapus menu
             Route::delete('/{id}', [MenuController::class, 'destroy']);
         });
 
@@ -83,11 +127,23 @@ Route::middleware(['auth:sanctum'])->group(function() {
     // Tables
     Route::prefix('table')->group(function() {
 
+        // Melihat daftar meja
         Route::get('/', [TableController::class, 'index']);
+
+        // Melihat detail meja
         Route::get('/{id}', [TableController::class, 'show']);
+
+        // Menambah meja
         Route::post('/', [TableController::class, 'store']);
-        Route::put('/{id}', [TableController::class, 'update']);
+
+        // Mengedit meja
+        Route::post('/{id}', [TableController::class, 'update']);
+
+        // Mengahpus meja
         Route::delete('/{id}', [TableController::class, 'destroy']);
     });
+
+    // Order
+    
 
 });
