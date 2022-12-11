@@ -13,99 +13,98 @@ import Takeaway from "./views/manager/contents/Takeaway.vue"
 
 import Login from "./views/auth/Login.vue"
 import Home from "./views/main/Home.vue"
-
-const routes=[
-    {
-        path: '/',
-        name: 'Home',
-        components: {
-            default:  Home,
-        },
-    },
-    {
-        path: '/auth/login',
-        name: 'Login',
-        components: {
-            default:  Login,
-        },
-    },
-    {
-        path: '/manager',
-        components: {
-            default:  Manager,
-            contents: NotFound
-        },
-        children: [
-            {
-                path: 'dashboard',
-                name: 'Dashboard',
-                components: {
-                    contents:  Dashboard,
-                }
-            },
-            {
-                path: 'role',
-                name: 'Role',
-                components: {
-                    contents:  Role,
-                }
-            },
-            {
-                path: 'user',
-                name: 'User',
-                components: {
-                    contents:  User,
-                }
-            },
-            {
-                path: 'table',
-                name: 'Table',
-                components: {
-                    contents:  Table,
-                }
-            },
-            {
-                path: 'menu',
-                name: 'Menu',
-                components: {
-                    contents:  Menu,
-                }
-            },
-            {
-                path: 'outlet',
-                name: 'Outlet',
-                components: {
-                    contents:  Outlet,
-                }
-            },
-            {
-                path: 'stock',
-                name: 'Stock',
-                components: {
-                    contents:  Stock,
-                }
-            },
-            {
-                path: 'wallet',
-                name: 'Wallet',
-                components: {
-                    contents:  Wallet,
-                }
-            },
-            {
-                path: 'takeaway',
-                name: 'Takeaway',
-                components: {
-                    contents:  Takeaway,
-                }
-            },
-        ],
-    }
-]
+import { AuthStore } from './stores/Auth';
 
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes: [
+        {
+            path: '/',
+            name: 'Home',
+            components: {
+                default:  Home,
+            },
+        },
+        {
+            path: '/auth/login',
+            name: 'Login',
+            components: {
+                default:  Login,
+            },
+        },
+        {
+            path: '/manager',
+            components: {
+                default:  Manager,
+                contents: NotFound
+            },
+            children: [
+                {
+                    path: 'dashboard',
+                    name: 'Dashboard',
+                    components: {
+                        contents:  Dashboard,
+                    }
+                },
+                {
+                    path: 'role',
+                    name: 'Role',
+                    components: {
+                        contents:  Role,
+                    }
+                },
+                {
+                    path: 'user',
+                    name: 'User',
+                    components: {
+                        contents:  User,
+                    }
+                },
+                {
+                    path: 'table',
+                    name: 'Table',
+                    components: {
+                        contents:  Table,
+                    }
+                },
+                {
+                    path: 'menu',
+                    name: 'Menu',
+                    components: {
+                        contents:  Menu,
+                    }
+                },
+                {
+                    path: 'outlet',
+                    name: 'Outlet',
+                    components: {
+                        contents:  Outlet,
+                    }
+                },
+                {
+                    path: 'stock',
+                    name: 'Stock',
+                    components: {
+                        contents:  Stock,
+                    }
+                },
+                {
+                    path: 'wallet',
+                    name: 'Wallet',
+                    components: {
+                        contents:  Wallet,
+                    }
+                },
+                {
+                    path: 'takeaway',
+                    name: 'Takeaway',
+                    components: {
+                        contents:  Takeaway,
+                    }
+                },
+            ],
+        }
+    ],
 })
 
 export default router;

@@ -18,6 +18,8 @@
         "vue-loader": "^17.0.1"
     },
     "dependencies": {
+        "pinia": "^2.0.27",
+        "sweetalert2": "^11.6.15",
         "vue-router": "^4.1.6",
         "vuex": "^4.1.0"
     }

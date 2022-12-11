@@ -21,14 +21,21 @@ class OutletMiddleware
         $params = $request->route()->parameters();
         if (isset($params['outlet_id'])) {
             $outlet = Outlet::find($params['outlet_id']);
-            if (Auth::user()->role_id == $outlet->owner_id || Auth::user()->hasPermission('api.outlet.edit')) {
-                return $next($request);
+            if ($outlet) {
+                if (Auth::user()->id == $outlet->owner_id || Auth::user()->hasPermission('api.outlet.edit')) {
+                    return $next($request);
+                }
+                return response()->json([
+                    "status" => false,
+                    "message" => "Anda tidak mempunyai izin untuk mengubah gerai ini",
+                    "body" => [],
+                ], 403);
             }
         }
         return response()->json([
             "status" => false,
-            "message" => "Anda tidak mempunyai izin untuk mengubah gerai ini",
+            "message" => "Gerai tidak ditemukan",
             "body" => [],
-        ], 403);
+        ], 404);
     }
 }

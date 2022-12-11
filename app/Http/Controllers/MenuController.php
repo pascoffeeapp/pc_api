@@ -26,13 +26,6 @@ class MenuController extends Controller
     // }
     
     public function show($outlet_id, $id) {
-        if (!Outlet::find($outlet_id)) {
-            return response()->json([
-                "status" => false,
-                "message" => "Gerai tidak ditemukan",
-                "body" => [],
-            ], 404);
-        }
         $menu = Menu::find($id);
         if ($menu) {
             return response()->json([
@@ -49,13 +42,6 @@ class MenuController extends Controller
     }
 
     public function store(Request $request, $outlet_id) {
-        if (!Outlet::find($outlet_id)) {
-            return response()->json([
-                "status" => false,
-                "message" => "Gerai tidak ditemukan",
-                "body" => [],
-            ], 404);
-        }
         $val = Validator::make($request->all(), [
             'name' => 'required',
             'image' => 'required',
@@ -63,6 +49,11 @@ class MenuController extends Controller
             'price' => 'required',
         ]);
         if ($val->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => "Inputan tidak benar",
+                "body" => $val->errors(),
+            ], 403);
         }
         $filename = '';
         if ($file = $request->file('image')) {
@@ -107,37 +98,39 @@ class MenuController extends Controller
             ], 403);
         }
         $menu = Menu::find($id);
-        $filename = $menu->image;
-        if ($file = $request->file('image')) {
-            $dir = 'uploads/menu';
-            if (file_exists(public_path($dir.$filename))) {
-                unlink(public_path($dir.$filename));
+
+        if ($menu) {
+            $filename = $menu->image;
+            if ($file = $request->file('image')) {
+                $dir = 'uploads/menu';
+                if (file_exists(public_path($dir.$filename))) {
+                    unlink(public_path($dir.$filename));
+                }
+                $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
+                $file->move($dir, $filename);
             }
-            $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
-            $file->move($dir, $filename);
-        }
-        $menu->update([
-            "name" => $request->name,
-            "image" => $filename,
-            "description" => $request->description,
-            "outlet_id" => $outlet_id,
-            "price" => $request->price,
-            "status" => $request->price,
-        ]);
-        return response()->json([
-            "status" => true,
-            "message" => "Berhasil mengubah menu",
-            "body" => $menu,
-        ], 200);
-    }
-    public function destroy($outlet_id, $id) {
-        if (!Outlet::find($outlet_id)) {
+            $menu->update([
+                "name" => $request->name,
+                "image" => $filename,
+                "description" => $request->description,
+                "outlet_id" => $outlet_id,
+                "price" => $request->price,
+                "status" => $request->price,
+            ]);
             return response()->json([
-                "status" => false,
-                "message" => "Gerai tidak ditemukan",
-                "body" => [],
-            ], 404);
+                "status" => true,
+                "message" => "Berhasil mengubah menu",
+                "body" => $menu,
+            ], 200);
         }
+        return response()->json([
+            "status" => false,
+            "message" => "Menu tidak ditemukan",
+            "body" => [],
+        ], 404);
+    }
+    
+    public function destroy($outlet_id, $id) {
         $menu = Menu::find($id);
         if ($menu) {
             $dir = 'uploads/menu/';

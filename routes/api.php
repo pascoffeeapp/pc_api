@@ -99,10 +99,10 @@ Route::middleware(['auth:sanctum'])->group(function() {
         Route::post('/', [OutletController::class, 'store']);
 
         // Mengedit gerai
-        Route::post('/{id}', [OutletController::class, 'update'])->middleware(['outlet']);
+        Route::post('/{outlet_id}', [OutletController::class, 'update'])->middleware(['outlet']);
 
         // Menghapus gerai
-        Route::delete('/{id}', [OutletController::class, 'destroy'])->middleware(['outlet']);
+        Route::delete('/{outlet_id}', [OutletController::class, 'destroy'])->middleware(['outlet']);
         
         // Menu
         Route::prefix('/{outlet_id}/menu')->middleware(['outlet'])->group(function() {
