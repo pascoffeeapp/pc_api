@@ -52,7 +52,7 @@ class OutletController extends Controller
         }
         $filename = '';
         if ($file = $request->file('image')) {
-            $dir = 'uploads/outlet';
+            $dir = 'uploads/';
             $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
             // dd($filename);
             $file->move($dir, $filename);
@@ -85,32 +85,39 @@ class OutletController extends Controller
             ], 403);
         }
         $outlet = Outlet::find($id);
-        $filename = $outlet->image;
-        if ($file = $request->file('image')) {
-            $dir = 'uploads/outlet';
-            if (file_exists(public_path($dir.$filename))) {
-                unlink(public_path($dir.$filename));
+        if ($outlet) {
+            $filename = $outlet->image;
+            if ($file = $request->file('image')) {
+                $dir = 'uploads/';
+                if (file_exists(public_path($dir.$filename))) {
+                    unlink(public_path($dir.$filename));
+                }
+                $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
+                $file->move($dir, $filename);
             }
-            $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
-            $file->move($dir, $filename);
+            $outlet->update([
+                "name" => $request->name,
+                "image" => $filename,
+                "description" => $request->description,
+                "owner_id" => $request->owner_id,
+            ]);
+            return response()->json([
+                "status" => true,
+                "message" => "Berhasil mengubah data gerai",
+                "body" => $outlet->getData(),
+            ], 200);
         }
-        $outlet->update([
-            "name" => $request->name,
-            "image" => $filename,
-            "description" => $request->description,
-            "owner_id" => $request->owner_id,
-        ]);
         return response()->json([
-            "status" => true,
-            "message" => "Berhasil mengubah data gerai",
-            "body" => $outlet->getData(),
-        ], 200);
+            "status" => false,
+            "message" => "Gerai tidak ditemukan",
+            "body" => [],
+        ], 404);
     }
 
     public function destroy($id) {
         $outlet = Outlet::find($id);
         if ($outlet) {
-            $dir = 'uploads/outlet/';
+            $dir = 'uploads/';
             $filename = $outlet->image;
             if (file_exists(public_path($dir.$filename))) {
                 unlink(public_path($dir.$filename));

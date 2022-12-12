@@ -65,8 +65,17 @@ class RoleController extends Controller
             "name" => "required",
         ]);
 
+        if ($val->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => "Invalid field",
+                "body" => $val->errors(),
+            ], 403);
+        }
+
         $role = Role::find($id);
         if ($role) {
+            $role->update($request->only('name'));
             $rp = RolePermission::where('role_id', $role->id)->get();
             foreach ($rp as $r) $r->delete();
             if ($request->permissions) {

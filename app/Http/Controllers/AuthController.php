@@ -74,14 +74,6 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function unauthorized() {
-        return response()->json([
-            "status" => false,
-            "message" => "Unauthorized",
-            "body" => [],
-        ], 401);
-    }
-
     public function me(Request $request) {
         $user = auth('sanctum')->user();
         return response()->json([

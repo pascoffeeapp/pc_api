@@ -1,3 +1,9 @@
+<script setup>
+import { AuthStore } from '../../stores/Auth';
+
+const store = AuthStore();
+</script>
+
 <template>
     <div class="login-wrapper">
         <div class="container">
@@ -22,10 +28,12 @@
 </template>
 
 <script>
-import axios from 'axios';
+// import { AuthStore } from '../../stores/Auth';
+
 export default {
     data(){
         return{
+            store: null,
             username: '',
             password: '',
             errors: {
@@ -34,17 +42,23 @@ export default {
             }
         }
     },
-    
+    mounted() {
+        if (AuthStore().isAuthenticated()) {
+            router.replace({name: 'Dashboard'})
+        }
+    },
     methods:{
         login(){
-            axios.post('https://kopipas.policyservices.site/api/auth/login').then(function(data){
-                console.dir(data)
-            }).catch(function(err){
-                console.dir(err)
-                let res = err.response.data
+            const store = AuthStore();
+            store.login({
+                username: this.username,
+                password: this.password,
+            }, (data) => {
+                this.$router.push({name: 'Dashboard'})
+            }, (data) => {
+                console.log(data)
             })
-
-        }
+        },
     }
 }
 </script>

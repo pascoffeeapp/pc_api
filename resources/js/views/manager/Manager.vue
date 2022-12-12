@@ -13,10 +13,17 @@ import Content from './Content.vue'
 </template>
 
 <script>
+import { AuthStore } from '../../stores/Auth';
 export default {
     data() {
         return {
             showSidebar: false
+        }
+    },
+    mounted() {
+        console.log(AuthStore().isAuthenticated())
+        if (!AuthStore().isAuthenticated()) {
+            router.replace({name: 'Login'})
         }
     },
     methods: {

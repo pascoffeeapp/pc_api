@@ -35,10 +35,18 @@ class PermissionController extends Controller
     }
 
     public function store(Request $request) {
-        $val = Validator::make([
+        $val = Validator::make($request->all(), [
             "key" => "required",
             "description" => "required",
         ]);
+
+        if ($val->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => "Inputan tidak benar",
+                "body" => $val->errors(),
+            ], 403);
+        }
 
         $permission = Permission::create($request->only('key', 'description'));
 
@@ -51,16 +59,24 @@ class PermissionController extends Controller
     }
 
     public function update(Request $request, $id) {
-        $val = Validator::make([
+        $val = Validator::make($request->all(), [
             "key" => "required",
             "description" => "required",
         ]);
+
+        if ($val->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => "Inputan tidak benar",
+                "body" => $val->errors(),
+            ], 403);
+        }
 
         $permission = Permission::find($id);
 
         if ($permission) {
 
-            $permission = Permission::update($request->only('key', 'description'));
+            $permission->update($request->only('key', 'description'));
             
             return response()->json([
                 "status" => true,
@@ -88,9 +104,14 @@ class PermissionController extends Controller
             return response()->json([
                 "status" => true,
                 "message" => "Izin berhasil di dihapus",
-                "body" => [],
+                "body" => $permission->toArray(),
             ], 200);
         }
+        return response()->json([
+            "status" => false,
+            "message" => "Izin tidak ditemukan",
+            "body" => [],
+        ], 404);
     }
 
 }
