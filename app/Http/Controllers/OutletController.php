@@ -52,7 +52,7 @@ class OutletController extends Controller
         }
         $filename = '';
         if ($file = $request->file('image')) {
-            $dir = 'uploads/outlet';
+            $dir = 'uploads/';
             $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
             // dd($filename);
             $file->move($dir, $filename);
@@ -88,7 +88,7 @@ class OutletController extends Controller
         if ($outlet) {
             $filename = $outlet->image;
             if ($file = $request->file('image')) {
-                $dir = 'uploads/outlet';
+                $dir = 'uploads/';
                 if (file_exists(public_path($dir.$filename))) {
                     unlink(public_path($dir.$filename));
                 }
@@ -117,7 +117,7 @@ class OutletController extends Controller
     public function destroy($id) {
         $outlet = Outlet::find($id);
         if ($outlet) {
-            $dir = 'uploads/outlet/';
+            $dir = 'uploads/';
             $filename = $outlet->image;
             if (file_exists(public_path($dir.$filename))) {
                 unlink(public_path($dir.$filename));

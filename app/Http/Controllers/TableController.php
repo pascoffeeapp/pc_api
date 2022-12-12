@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Table;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,6 +11,9 @@ class TableController extends Controller
 {
     public function index() {
         $tables = Table::all();
+        foreach ($tables as $table) {
+            $table->status = $table->getStatus();
+        }
         return response()->json([
             "status" => true,
             "message" => "Berhasil memuat meja",
@@ -34,7 +38,7 @@ class TableController extends Controller
     }
 
     public function store(Request $request) {
-        $val = Validator::make([
+        $val = Validator::make($request->all(), [
             "code" => 'required',
         ]);
 
@@ -55,7 +59,7 @@ class TableController extends Controller
     }
 
     public function update(Request $request, $id) {
-        $val = Validator::make([
+        $val = Validator::make($request->all(), [
             "code" => 'required',
         ]);
 
@@ -92,6 +96,30 @@ class TableController extends Controller
                 "message" => "Berhasil menghapus meja",
                 "body" => $table,
             ], 200);
+        }
+        return response()->json([
+            "status" => false,
+            "message" => "Meja tidak ditemukan",
+            "body" => [],
+        ], 404);
+    }
+    
+    public function showOrder($id) {
+        $table = Table::find($id);
+        if ($table) {
+            $order = $table->getCurrentOrder();
+            if ($order) {
+                return response()->json([
+                    "status" => true,
+                    "message" => "Berhasil memuat pesanan",
+                    "body" => $order->getData(),
+                ], 200);
+            }
+            return response()->json([
+                "status" => false,
+                "message" => "Pesanan tidak ditemukan",
+                "body" => [],
+            ], 404);
         }
         return response()->json([
             "status" => false,

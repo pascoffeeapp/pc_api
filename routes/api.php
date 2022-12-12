@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -141,9 +142,41 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
         // Mengahpus meja
         Route::delete('/{id}', [TableController::class, 'destroy']);
+
+        // Melihat pesanan
+        Route::get('/{id}/order', [TableController::class, 'showOrder']);
     });
 
     // Order
+    Route::prefix('order')->group(function() {
+
+        // Melihat daftar pesanan
+        Route::get('/', [OrderController::class, 'index']);
+
+        // Melihat detail pesanan
+        Route::get('/{id}', [OrderController::class, 'show']);
+
+        // Menambah pesanan
+        Route::post('/', [OrderController::class, 'store']);
+
+        // Mengedit pesanan
+        Route::post('/{id}', [OrderController::class, 'update']);
+
+        // Mengahpus pesanan
+        Route::delete('/{id}', [OrderController::class, 'destroy']);
+
+        Route::prefix('{id}/item')->group(function() {
     
+            // Menambah item pesanan
+            Route::post('/', [OrderController::class, 'itemStore']);
+    
+            // Mengedit item pesanan
+            Route::post('/{item_id}', [OrderController::class, 'itemUpdate']);
+    
+            // Mengahpus item pesanan
+            Route::delete('/{item_id}', [OrderController::class, 'itemDestroy']);
+            
+        });
+    });
 
 });

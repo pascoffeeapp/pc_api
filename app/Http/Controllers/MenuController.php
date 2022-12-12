@@ -102,7 +102,7 @@ class MenuController extends Controller
         if ($menu) {
             $filename = $menu->image;
             if ($file = $request->file('image')) {
-                $dir = 'uploads/menu';
+                $dir = 'uploads/';
                 if (file_exists(public_path($dir.$filename))) {
                     unlink(public_path($dir.$filename));
                 }
@@ -113,7 +113,6 @@ class MenuController extends Controller
                 "name" => $request->name,
                 "image" => $filename,
                 "description" => $request->description,
-                "outlet_id" => $outlet_id,
                 "price" => $request->price,
                 "status" => $request->price,
             ]);
@@ -133,9 +132,8 @@ class MenuController extends Controller
     public function destroy($outlet_id, $id) {
         $menu = Menu::find($id);
         if ($menu) {
-            $dir = 'uploads/menu/';
+            $dir = 'uploads/';
             $filename = $menu->image;
-            // dd(file_exists(public_path($dir.$filename)));
             if (file_exists(public_path($dir.$filename))) {
                 unlink(public_path($dir.$filename));
             }
