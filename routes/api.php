@@ -68,6 +68,26 @@ Route::middleware(['auth:sanctum'])->group(function() {
         
     });
 
+    // User
+    Route::prefix('user')->group(function() {
+    
+        // Melihat daftar pengguna
+        Route::get('/', [UserController::class, 'index']);
+
+        // Melihat detail pengguna
+        Route::get('/{id}', [UserController::class, 'show']);
+
+        // Menambahkan pengguna
+        Route::post('/', [UserController::class, 'store']);
+
+        // Mengedit pengguna
+        Route::post('/{id}', [UserController::class, 'update']);
+
+        // Menghapus pengguna
+        Route::delete('/{id}', [UserController::class, 'destroy']);
+        
+    });
+
     Route::prefix('permission')->group(function() {
     
         // Melihat daftar izin
