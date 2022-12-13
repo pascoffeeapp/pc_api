@@ -28,6 +28,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function getData() {
+        $user = User::find($this->id);
+        $user->role = Role::find($user->role_id);
+        unset($user->role_id);
+        return $user;
+    }
+
     public function getRole() {
         return Role::where('id', $this->role_id)->first();
     }
