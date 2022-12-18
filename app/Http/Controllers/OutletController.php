@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Outlet;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class OutletController extends Controller
 {
     public function index() {
-        $outlets = Outlet::selectRaw('outlets.id, outlets.name, image, description, users.username as owner')
-        ->join('users', 'users.id', '=', 'outlets.owner_id')->get();
-        $data['outlets'] = $outlets;
+        $outlets = Outlet::get();
+        foreach ($outlets as $outlet) {
+            $outlet = $outlet->getData();
+        }
+
         return response()->json([
             "status" => true,
             "message" => "Berhasil memuat gerai",

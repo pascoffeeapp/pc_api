@@ -14,10 +14,10 @@ class Outlet extends Model
     ];
 
     public function getData() {
-        $outlet = Outlet::where('id', $this->id)->first();
         // $outlet->owner = User::where('id', $outlet->owner_id)->selectRaw("id, username")->first();
-        $outlet->menu = Menu::where('outlet_id', $this->id)->get();
+        $this->menu = Menu::where('outlet_id', $this->id)->get();
+        $this->owner = User::find($this->owner_id);
         // unset($outlet->owner_id);
-        return $outlet;
+        return $this;
     }
 }

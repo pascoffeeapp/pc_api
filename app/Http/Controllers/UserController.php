@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -39,7 +40,7 @@ class UserController extends Controller
 
     public function store(Request $request) {
         $val = Validator::make($request->all(), [
-            "username" => "required",
+            "username" => "required|unique:users,username",
             "password" => "required",
             "confirm_password" => "required|same:password",
             "role_id" => "required",
@@ -51,7 +52,11 @@ class UserController extends Controller
                 "body" => [],
             ], 403);
         }
-        $user = User::create($request->only(['username', 'password', "role_id"]));
+        $user = User::create([
+            "username" => strtolower($request->username),
+            "password" => Hash::make($request->password),
+            "role_id" => $request->role_id,
+        ]);
         return response()->json([
             "status" => true,
             "message" => "Berhasil menambahkan pengguna",
@@ -68,7 +73,7 @@ class UserController extends Controller
             ];
         }
         $val = Validator::make($request->all(), [
-            "username" => "required",
+            "username" => "required|unique:users,username",
             "role_id" => "required",
             ...$v,
         ]);
@@ -86,7 +91,11 @@ class UserController extends Controller
                 "role_id" => $request->role_id,  
             ];
             if (strlen(trim($request->password)) > 0) $data['password'] = $request->password;
-            $user->update($data);
+            $user->update([
+                "username" => strtolower($request->username),
+                "password" => Hash::make($request->password),
+                "role_id" => $request->role_id,
+            ]);
             return response()->json([
                 "status" => true,
                 "message" => "Berhasil mengubah pengguna",

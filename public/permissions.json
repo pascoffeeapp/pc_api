@@ -1,7 +1,8 @@
 {
-    "api.role.index": "Melihat daftar role yang ada",
-    "api.role.show": "Melihat daftar role yang ada",
-    "api.role.store": "Melihat daftar role yang ada",
-    "api.role.update": "Melihat daftar role yang ada",
-    "api.role.destroy": "Melihat daftar role yang ada"
+    "manager.dashboard": "Melihat daftar role yang ada",
+    "manager.user": "Melihat daftar role yang ada",
+    "manager.role": "Melihat daftar role yang ada",
+    "manager.outlet": "Melihat daftar role yang ada",
+    "manager.menu": "Melihat daftar role yang ada",
+    "manager.takeaway": "Melihat daftar role yang ada"
 }

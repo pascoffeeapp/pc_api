@@ -53,6 +53,15 @@ class RoleController extends Controller
             "name" => strtolower($request->name),
         ]);
 
+        if ($request->permissions) {
+            foreach ($request->permissions as $permission_id) {
+                RolePermission::create([
+                    "role_id" => $role->id,
+                    "permission_id" => $permission_id,
+                ]);
+            }
+        }
+
         return response()->json([
             "status" => true,
             "message" => "Role successfully created",
@@ -76,8 +85,12 @@ class RoleController extends Controller
         $role = Role::find($id);
         if ($role) {
             $role->update($request->only('name'));
+
             $rp = RolePermission::where('role_id', $role->id)->get();
             foreach ($rp as $r) $r->delete();
+
+            
+            // dd($request->permissions);
             if ($request->permissions) {
                 foreach ($request->permissions as $permission_id) {
                     RolePermission::create([
@@ -86,6 +99,7 @@ class RoleController extends Controller
                     ]);
                 }
             }
+
             return response()->json([
                 "status" => true,
                 "message" => "Role berhasil diubah",

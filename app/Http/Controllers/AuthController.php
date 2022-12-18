@@ -51,7 +51,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Invalid field',
-                'errors' => $val->errors()
+                'body' => $val->errors()
             ], 403);
         }
         if(!Auth::attempt($request->only(['username', 'password']))){
