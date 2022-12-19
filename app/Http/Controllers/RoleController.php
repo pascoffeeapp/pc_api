@@ -12,10 +12,15 @@ class RoleController extends Controller
 {
 
     public function index() {
+        $roles = [];
+        foreach (Role::all() as $role) {
+            $roles[] = $role->getData();
+        }
+        // dd($roles);
         return response()->json([
             "status" => true,
             "message" => "Role successfully loaded",
-            "body" => Role::all()->toArray(),
+            "body" => $roles,
         ], 200);
     }
 
@@ -65,7 +70,7 @@ class RoleController extends Controller
         return response()->json([
             "status" => true,
             "message" => "Role successfully created",
-            "body" => $role->toArray(),
+            "body" => $role->getData(),
         ], 200);
     }
     
@@ -88,15 +93,16 @@ class RoleController extends Controller
 
             $rp = RolePermission::where('role_id', $role->id)->get();
             foreach ($rp as $r) $r->delete();
-
             
-            // dd($request->permissions);
+            
             if ($request->permissions) {
+                
                 foreach ($request->permissions as $permission_id) {
-                    RolePermission::create([
+                    $rp = RolePermission::create([
                         "role_id" => $role->id,
                         "permission_id" => $permission_id,
                     ]);
+                    // dd($rp);
                 }
             }
 

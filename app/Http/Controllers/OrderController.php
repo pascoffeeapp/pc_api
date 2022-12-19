@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ReservedTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -36,7 +37,6 @@ class OrderController extends Controller
 
     public function store(Request $request) {
         $val = Validator::make($request->all(), [
-            "is_takeway" => "required|boolean",
             "table_id" => "",
         ]);
         if ($val->fails()) {
@@ -47,8 +47,11 @@ class OrderController extends Controller
             ], 403);
         }
         $order = Order::create([
-            ...$request->only(['table_id', 'is_takeway']),
             "user_id" => auth()->user()->id,
+        ]);
+        ReservedTable::create([
+            'order_id' => $order->id,
+            'table_id' => $request->table_id,
         ]);
         return response()->json([
             "status" => true,
@@ -60,7 +63,6 @@ class OrderController extends Controller
     public function update(Request $request, $id) {
         $val = Validator::make($request->all(), [
             "table_id" => "",
-            "is_takeway" => "required|boolean",
         ]);
         if ($val->fails()) {
             return response()->json([

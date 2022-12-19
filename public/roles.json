@@ -3,10 +3,12 @@
         "manager.dashboard",
         "manager.user",
         "manager.role",
+        "manager.table",
         "manager.outlet"
     ],
-    "casier": [
+    "cashier": [
         "manager.dashboard",
+        "manager.cashier",
         "manager.takeaway"
     ],
     "owner_outlet": [

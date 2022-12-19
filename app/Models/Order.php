@@ -10,11 +10,11 @@ class Order extends Model
     use HasFactory;
 
     public $fillable = [
-        "table_id", "user_id", "is_takeway"
+        "user_id"
     ];
 
     public function isDone() {
-        return !is_null(Invoice::where('order_id', $this->id)->first());
+        return !is_null($this->done_at);
     }
 
     public function getData() {

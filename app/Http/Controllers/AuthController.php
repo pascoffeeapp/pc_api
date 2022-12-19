@@ -76,6 +76,11 @@ class AuthController extends Controller
 
     public function me(Request $request) {
         $user = auth('sanctum')->user();
+        $user->role = null;
+        $role = Role::find($user->role_id);
+        if ($role) {
+            $user->role = $role->getData();
+        }
         return response()->json([
             "status" => true,
             "message" => "User has logged",

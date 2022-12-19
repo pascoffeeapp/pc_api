@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Outlet;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -98,13 +100,29 @@ class UserController extends Controller
             ]);
             return response()->json([
                 "status" => true,
-                "message" => "Berhasil mengubah pengguna",
+                "message" => "Pengguna berhasil di update",
                 "body" => $user->getData(),
             ], 200);
         }
         return response()->json([
             "status" => false,
             "message" => "Pengguna tidak ditemukan",
+            "body" => [],
+        ], 404);
+    }
+
+    function getOutlet($id) {
+        $outlet = Outlet::where('owner_id', $id)->first();
+        if ($outlet) {
+            return response()->json([
+                "status" => true,
+                "message" => "Pengguna berhasil di update",
+                "body" => $outlet->getData(),
+            ], 200);
+        }
+        return response()->json([
+            "status" => false,
+            "message" => "Outlet tidak ditemukan",
             "body" => [],
         ], 404);
     }

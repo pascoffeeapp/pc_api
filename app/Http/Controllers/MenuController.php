@@ -57,7 +57,7 @@ class MenuController extends Controller
         }
         $filename = '';
         if ($file = $request->file('image')) {
-            $dir = 'uploads/menu';
+            $dir = 'uploads/';
             $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
             $file->move($dir, $filename);
         }
@@ -114,7 +114,7 @@ class MenuController extends Controller
                 "image" => $filename,
                 "description" => $request->description,
                 "price" => $request->price,
-                "status" => $request->price,
+                "status" => $request->status,
             ]);
             return response()->json([
                 "status" => true,

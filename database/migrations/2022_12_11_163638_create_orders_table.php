@@ -15,14 +15,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('is_takeway');
             $table->foreignId('user_id');
-            $table->foreignId('table_id');
-            $table->timestamp('done_at');
+            $table->text('data');
+            $table->string('done_at')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('table_id')->references('id')->on('tables');
         });
     }
 

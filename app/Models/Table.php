@@ -18,7 +18,7 @@ class Table extends Model
     }
 
     public function getCurrentOrder() {
-        foreach (Order::where('table_id',$this->id)->get() as $order) {
+        foreach (ReservedTable::where('table_id',$this->id)->get() as $order) {
             if (!$order->isDone()) {
                 return $order;
             }

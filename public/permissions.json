@@ -1,8 +1,10 @@
 {
-    "manager.dashboard": "Melihat daftar role yang ada",
-    "manager.user": "Melihat daftar role yang ada",
-    "manager.role": "Melihat daftar role yang ada",
-    "manager.outlet": "Melihat daftar role yang ada",
-    "manager.menu": "Melihat daftar role yang ada",
-    "manager.takeaway": "Melihat daftar role yang ada"
+    "manager.dashboard": "Halaman Dashboard",
+    "manager.user": "Halaman Kelola Pengguna",
+    "manager.role": "Halaman Kelola Peran",
+    "manager.outlet": "Halaman Kelola Gerai",
+    "manager.menu": "Halaman Kelola Menu",
+    "manager.takeaway": "Halaman Pemesanan Takeaway",
+    "manager.cashier": "Halaman Kasir",
+    "manager.table": "Halaman Kasir"
 }

@@ -57,7 +57,6 @@ class OutletController extends Controller
         if ($file = $request->file('image')) {
             $dir = 'uploads/';
             $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
-            // dd($filename);
             $file->move($dir, $filename);
         }
         $outlet = Outlet::create([
@@ -69,7 +68,7 @@ class OutletController extends Controller
         return response()->json([
             "status" => true,
             "message" => "Berhasil menambah gerai",
-            "body" => $outlet,
+            "body" => $outlet->getData(),
         ], 200);
     }
 
