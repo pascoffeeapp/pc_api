@@ -177,13 +177,14 @@ Route::middleware(['auth:sanctum'])->group(function() {
         Route::get('/', [OrderController::class, 'index']);
 
         // Melihat detail pesanan
-        Route::get('/{id}', [OrderController::class, 'show']);
+        // Route::get('/{id}', [OrderController::class, 'show']);
 
         // Menambah pesanan
-        Route::post('/', [OrderController::class, 'store']);
+        Route::post('/dine_in', [OrderController::class, 'createDineInOrder']);
+        Route::post('/take_away', [OrderController::class, 'createTakeAwayOrder']);
 
         // Mengedit pesanan
-        Route::post('/{id}', [OrderController::class, 'update']);
+        Route::post('/take_away/{id}', [OrderController::class, 'updateTakeAwayOrder']);
 
         // Mengahpus pesanan
         Route::delete('/{id}', [OrderController::class, 'destroy']);
@@ -191,13 +192,13 @@ Route::middleware(['auth:sanctum'])->group(function() {
         Route::prefix('{id}/item')->group(function() {
     
             // Menambah item pesanan
-            Route::post('/', [OrderController::class, 'itemStore']);
+            Route::post('/', [OrderController::class, 'addItem']);
     
             // Mengedit item pesanan
-            Route::post('/{item_id}', [OrderController::class, 'itemUpdate']);
+            // Route::post('/{item_id}', [OrderController::class, 'itemUpdate']);
     
             // Mengahpus item pesanan
-            Route::delete('/{item_id}', [OrderController::class, 'itemDestroy']);
+            Route::delete('/{item_id}', [OrderController::class, 'removeItem']);
             
         });
     });
