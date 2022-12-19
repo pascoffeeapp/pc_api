@@ -17,12 +17,27 @@ class Order extends Model
         return !is_null($this->done_at);
     }
 
+    public function isTakeaway() {
+        $tc = TakeawayCostumer::where('order_id', $this->id)->first();
+        return !is_null($tc);
+    }
+
     public function getData() {
-        $order = Order::where('id', $this->id)->first();
-        $order->items = OrderItem::where('order_id', $order->id)
+        $ita = $this->isTakeaway();
+        if ($ita) {
+            $this->costumer = TakeawayCostumer::where('order_id', $this->id)->first();
+        }else {
+            $rt = ReservedTable::where('order_id', $this->id)->first();
+            $table = Table::find($rt->table_id);
+            $table->reserved_id = $rt->id;
+            $this->reserved_table = $table;
+        }
+        $this->isTakeAway = $ita;
+        $this->items = OrderItem::where('order_id', $this->id)
         ->join('menu', 'menu.id', '=', 'order_items.menu_id')
         ->select('menu.name', 'menu.image', 'menu.id', 'order_items.qty', 'menu.price', 'order_items.status')
         ->get();
-        return $order;
+
+        return $this;
     }
 }

@@ -13,14 +13,14 @@ class Table extends Model
         'code',
     ];
 
-    public function getStatus() {
+    public function isFree() {
         return !is_null($this->getCurrentOrder());
     }
 
     public function getCurrentOrder() {
-        foreach (ReservedTable::where('table_id',$this->id)->get() as $order) {
-            if (!$order->isDone()) {
-                return $order;
+        foreach (ReservedTable::where('table_id',$this->id)->get() as $rt) {
+            if (!$rt->getOrder()->isDone()) {
+                return $rt->getOrder();
             }
         }
         return null;

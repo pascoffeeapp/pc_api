@@ -5,15 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ReservedTable extends Model
+class TakeawayCostumer extends Model
 {
     use HasFactory;
 
     public $fillable = [
-        'order_id', 'table_id',
+        'order_id', 'name',
     ];
-
-    public function getOrder() {
-        return Order::find($this->order_id);
-    }
 }

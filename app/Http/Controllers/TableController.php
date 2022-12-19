@@ -12,7 +12,7 @@ class TableController extends Controller
     public function index() {
         $tables = Table::all();
         foreach ($tables as $table) {
-            $table->status = $table->getStatus();
+            $table->status = $table->isFree();
         }
         return response()->json([
             "status" => true,

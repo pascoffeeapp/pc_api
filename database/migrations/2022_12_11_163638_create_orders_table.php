@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->text('data');
+            $table->text('data')->nullable();
             $table->string('done_at')->nullable();
             $table->timestamps();
 
