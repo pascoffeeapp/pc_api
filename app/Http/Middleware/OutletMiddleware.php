@@ -22,7 +22,7 @@ class OutletMiddleware
         if (isset($params['outlet_id'])) {
             $outlet = Outlet::find($params['outlet_id']);
             if ($outlet) {
-                if (Auth::user()->id == $outlet->owner_id || Auth::user()->hasPermission('api.outlet.edit')) {
+                if (Auth::user()->id == $outlet->owner_id || Auth::user()->role_id == 1) {
                     return $next($request);
                 }
                 return response()->json([

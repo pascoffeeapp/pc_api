@@ -1,7 +1,10 @@
 {
-    "api.role.index": "Melihat daftar role yang ada",
-    "api.role.show": "Melihat daftar role yang ada",
-    "api.role.store": "Melihat daftar role yang ada",
-    "api.role.update": "Melihat daftar role yang ada",
-    "api.role.destroy": "Melihat daftar role yang ada"
+    "manager.dashboard": "Halaman Dashboard",
+    "manager.user": "Halaman Kelola Pengguna",
+    "manager.role": "Halaman Kelola Peran",
+    "manager.outlet": "Halaman Kelola Gerai",
+    "manager.menu": "Halaman Kelola Menu",
+    "manager.takeaway": "Halaman Pemesanan Takeaway",
+    "manager.cashier": "Halaman Kasir",
+    "manager.table": "Halaman Kasir"
 }

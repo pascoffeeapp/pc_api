@@ -20,6 +20,9 @@ return new class extends Migration
             $table->integer('qty');
             $table->integer('status');
             $table->timestamps();
+
+            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('menu_id')->references('id')->on('menu');
         });
     }
 

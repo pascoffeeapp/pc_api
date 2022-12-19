@@ -1,5 +1,18 @@
 {
     "admin": [
-        "api.role.index"
+        "manager.dashboard",
+        "manager.user",
+        "manager.role",
+        "manager.table",
+        "manager.outlet"
+    ],
+    "cashier": [
+        "manager.dashboard",
+        "manager.cashier",
+        "manager.takeaway"
+    ],
+    "owner_outlet": [
+        "manager.dashboard",
+        "manager.menu"
     ]
 }

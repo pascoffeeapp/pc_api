@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Outlet;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class OutletController extends Controller
 {
     public function index() {
-        $outlets = Outlet::selectRaw('outlets.id, outlets.name, image, description, users.username as owner')
-        ->join('users', 'users.id', '=', 'outlets.owner_id')->get();
-        $data['outlets'] = $outlets;
+        $outlets = Outlet::get();
+        foreach ($outlets as $outlet) {
+            $outlet = $outlet->getData();
+        }
+
         return response()->json([
             "status" => true,
             "message" => "Berhasil memuat gerai",
@@ -54,7 +57,6 @@ class OutletController extends Controller
         if ($file = $request->file('image')) {
             $dir = 'uploads/';
             $filename = time().rand(1111,9999).'.'.$file->getClientOriginalExtension();
-            // dd($filename);
             $file->move($dir, $filename);
         }
         $outlet = Outlet::create([
@@ -66,7 +68,7 @@ class OutletController extends Controller
         return response()->json([
             "status" => true,
             "message" => "Berhasil menambah gerai",
-            "body" => $outlet,
+            "body" => $outlet->getData(),
         ], 200);
     }
 

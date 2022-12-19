@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('order_items', function (Blueprint $table) {
+        Schema::create('takeway_costumers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->foreignId('order_id');
+            $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders');
-            $table->foreign('menu_id')->references('id')->on('menu');
         });
     }
 
@@ -27,8 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('order_items', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('takeway_costumers');
     }
 };

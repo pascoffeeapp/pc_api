@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('invoices', function (Blueprint $table) {
+        Schema::create('reserved_tables', function (Blueprint $table) {
             $table->id();
-            $table->text('order_items');
-            $table->integer('total');
-            $table->foreignId('order_id')->nullable();
+            $table->foreignId('table_id');
+            $table->foreignId('order_id');
             $table->timestamps();
 
-            $table->foreign('order_id')->references('id')->on('menu');
+            $table->foreign('table_id')->references('id')->on('tables');
+            $table->foreign('order_id')->references('id')->on('orders');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoices');
+        Schema::dropIfExists('reserved_tables');
     }
 };

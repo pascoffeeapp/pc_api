@@ -85,6 +85,9 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
         // Menghapus pengguna
         Route::delete('/{id}', [UserController::class, 'destroy']);
+
+        // Melihat outlet pengguna
+        Route::get('/{id}/outlet', [UserController::class, 'getOutlet']);
         
     });
 
