@@ -8,16 +8,37 @@ use App\Models\OrderItem;
 use App\Models\ReservedTable;
 use App\Models\Table;
 use App\Models\TakeawayCostumer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         $orders = [];
         foreach (Order::all() as $order) {
-            $orders[] = $order->getData();
+            $order = $order->getData();
+            if ($request->get('type') != 'all') {
+                if ($order->isDone()) {
+                    continue;
+                }
+            }else if ($request->get('type') != 'done') {
+                if (!$order->isDone()) {
+                    continue;
+                }
+            }
+            if ($request->get('by') == 'costumer') {
+                if ($order->isTakeaway()) {
+                    $orders[] = $order;
+                }
+            }else if ($request->get('by') == 'table'){
+                if (!$order->isTakeaway()) {
+                    $orders[] = $order;
+                }
+            }else {
+                $orders[] = $order;
+            }
         }
         return response()->json([
             "status" => true,
@@ -170,7 +191,7 @@ class OrderController extends Controller
     public function addItem(Request $request, $id) {
         $val = Validator::make($request->all(), [
             "menu_id" => "required",
-            "qty" => "required|numeric|min_digits:1",
+            "qty" => "required|numeric|min:1",
         ]);
         if ($val->fails()) {
             return response()->json([
@@ -208,12 +229,9 @@ class OrderController extends Controller
         ], 404);
     }
 
-
     // Edit Status dan Quantity jangan bersamaan
-    // Ubah Status Code 403 menjadi 400
-    public function updateItem(Request $request, $id, $item_id) {
+    public function updateQtyItem(Request $request, $id, $item_id) {
         $val = Validator::make($request->all(), [
-            "status" => "required",
             "qty" => "required|numeric|min_digits:1",
         ]);
         if ($val->fails()) {
@@ -237,7 +255,6 @@ class OrderController extends Controller
                 }else {
                     $oi->update([
                         "qty" => $request->qty,
-                        "status" => $request->status,
                     ]);
                     return response()->json([
                         "status" => true,
@@ -245,6 +262,44 @@ class OrderController extends Controller
                         "body" => $oi,
                     ], 200);
                 }
+            }
+            return response()->json([
+                "status" => false,
+                "message" => "Item tidak ditemukan",
+                "body" => [],
+            ], 404);
+        }
+        return response()->json([
+            "status" => false,
+            "message" => "Pesanan tidak ditemukan",
+            "body" => [],
+        ], 404);
+    }
+
+    // Edit Status dan Quantity jangan bersamaan
+    public function updateStatusItem(Request $request, $id, $item_id) {
+        $val = Validator::make($request->all(), [
+            "status" => "required",
+        ]);
+        if ($val->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => "Inputan tidak benar",
+                "body" => $val->errors(),
+            ], 400);
+        }
+        $order = Order::find($id);
+        if ($order) {
+            $oi = OrderItem::find($item_id);
+            if ($oi) {
+                $oi->update([
+                    "status" => $request->status,
+                ]);
+                return response()->json([
+                    "status" => true,
+                    "message" => "Berhasil mengubah item",
+                    "body" => $oi,
+                ], 200);
             }
             return response()->json([
                 "status" => false,
@@ -277,6 +332,59 @@ class OrderController extends Controller
                 "body" => [],
             ], 404);
         }
+        return response()->json([
+            "status" => false,
+            "message" => "Pesanan tidak ditemukan",
+            "body" => [],
+        ], 404);
+    }
+
+    public function checkout($id) {
+        $order = Order::find($id);
+
+        if ($order) {
+            if (is_null($order->done_at)) {
+
+                $order = $order->getData();
+                $items = OrderItem::where('order_id', $order->id)
+                ->join('menu', 'menu.id', '=', 'order_items.menu_id')
+                ->selectRaw('menu.name, menu.price, order_items.qty as quantity')
+                ->get();
+                $total = 0;
+                foreach ($items as $item) {
+                    $item->total = (int) $item->price * (int) $item->quantity;
+                    $total += $item->total;
+                }
+                $user = User::find($order->user_id);
+                
+                $data = [
+                    "items" => $items,
+                    "total" => $total,
+                    "waiter" => $user->username,
+                ];
+                if ($order->isTakeAway()) {
+                    $data['costumer'] = $order->costumer->name;
+                } else {
+                    $data['table'] = $order->reserved_table->code;
+                }
+                $order = Order::find($order->id);
+                $order->done_at = date('d M Y H:i:s');
+                $order->data = $data;
+                $order->save();
+                return response()->json([
+                    "status" => true,
+                    "message" => "Berhasil di simpan",
+                    "body" => $order,
+                ], 200);
+            }
+
+            return response()->json([
+                "status" => false,
+                "message" => "Pesanan sudah tidak berlaku",
+                "body" => [],
+            ], 403);
+        }
+
         return response()->json([
             "status" => false,
             "message" => "Pesanan tidak ditemukan",
