@@ -35,7 +35,7 @@ class Order extends Model
         $this->isTakeAway = $ita;
         $this->items = OrderItem::where('order_id', $this->id)
         ->join('menu', 'menu.id', '=', 'order_items.menu_id')
-        ->select('menu.name', 'menu.image', 'menu.id', 'order_items.qty', 'menu.price', 'order_items.status')
+        ->select('order_items.id as item_id', 'menu.name', 'menu.image', 'menu.id', 'order_items.qty', 'menu.price', 'order_items.status')
         ->get();
 
         return $this;

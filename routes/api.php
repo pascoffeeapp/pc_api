@@ -186,6 +186,9 @@ Route::middleware(['auth:sanctum'])->group(function() {
         // Mengedit pesanan
         Route::post('/take_away/{id}', [OrderController::class, 'updateTakeAwayOrder']);
 
+        // Bayar pesanan
+        Route::post('/{id}/checkout', [OrderController::class, 'checkout']);
+
         // Mengahpus pesanan
         Route::delete('/{id}', [OrderController::class, 'destroy']);
 
@@ -195,7 +198,8 @@ Route::middleware(['auth:sanctum'])->group(function() {
             Route::post('/', [OrderController::class, 'addItem']);
     
             // Mengedit item pesanan
-            // Route::post('/{item_id}', [OrderController::class, 'itemUpdate']);
+            Route::post('/{item_id}/qty', [OrderController::class, 'updateQtyItem']);
+            Route::post('/{item_id}/status', [OrderController::class, 'updateStatusItem']);
     
             // Mengahpus item pesanan
             Route::delete('/{item_id}', [OrderController::class, 'removeItem']);

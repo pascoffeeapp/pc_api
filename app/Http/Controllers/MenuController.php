@@ -9,21 +9,6 @@ use Illuminate\Support\Facades\Validator;
 
 class MenuController extends Controller
 {
-    // public function index($outlet_id) {
-    //     if (!Outlet::find($outlet_id)) {
-    //         return response()->json([
-    //             "status" => false,
-    //             "message" => "Gerai tidak ditemukan",
-    //             "body" => [],
-    //         ], 404);
-    //     }
-    //     $menu = Menu::all();
-    //     return response()->json([
-    //         "status" => true,
-    //         "message" => "Berhasil memuat menu",
-    //         "body" => $menu,
-    //     ], 200);
-    // }
     
     public function show($outlet_id, $id) {
         $menu = Menu::find($id);
@@ -53,7 +38,7 @@ class MenuController extends Controller
                 "status" => false,
                 "message" => "Inputan tidak benar",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
         $filename = '';
         if ($file = $request->file('image')) {
@@ -95,7 +80,7 @@ class MenuController extends Controller
                 "status" => false,
                 "message" => "Inputan tidak benar",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
         $menu = Menu::find($id);
 

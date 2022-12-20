@@ -47,7 +47,7 @@ class TableController extends Controller
                 "status" => false,
                 "message" => "Inputan tidak benar",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
 
         $table = Table::create($request->only(['code']));
@@ -68,7 +68,7 @@ class TableController extends Controller
                 "status" => false,
                 "message" => "Inputan tidak benar",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
 
         $table = Table::find($id);

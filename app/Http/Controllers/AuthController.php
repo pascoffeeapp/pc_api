@@ -24,7 +24,7 @@ class AuthController extends Controller
                 "status" => false,
                 "message" => "Invalid field",
                 "body" => $val->errors(),
-            ], 493);
+            ], 400);
         }
 
         $user = User::create([
@@ -52,7 +52,7 @@ class AuthController extends Controller
                 'status' => false,
                 'message' => 'Invalid field',
                 'body' => $val->errors()
-            ], 403);
+            ], 400);
         }
         if(!Auth::attempt($request->only(['username', 'password']))){
             return response()->json([

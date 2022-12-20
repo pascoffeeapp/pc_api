@@ -51,7 +51,7 @@ class OutletController extends Controller
                 "status" => false,
                 "message" => "Inputan tidak benar",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
         $filename = '';
         if ($file = $request->file('image')) {
@@ -84,7 +84,7 @@ class OutletController extends Controller
                 "status" => false,
                 "message" => "Inputan tidak benar",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
         $outlet = Outlet::find($id);
         if ($outlet) {

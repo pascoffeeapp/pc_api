@@ -51,7 +51,7 @@ class RoleController extends Controller
                 "status" => false,
                 "message" => "Invalid field",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
 
         $role = Role::create([
@@ -84,7 +84,7 @@ class RoleController extends Controller
                 "status" => false,
                 "message" => "Invalid field",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
 
         $role = Role::find($id);

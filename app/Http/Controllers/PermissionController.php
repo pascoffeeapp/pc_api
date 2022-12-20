@@ -45,7 +45,7 @@ class PermissionController extends Controller
                 "status" => false,
                 "message" => "Inputan tidak benar",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
 
         $permission = Permission::create($request->only('key', 'description'));
@@ -69,7 +69,7 @@ class PermissionController extends Controller
                 "status" => false,
                 "message" => "Inputan tidak benar",
                 "body" => $val->errors(),
-            ], 403);
+            ], 400);
         }
 
         $permission = Permission::find($id);
