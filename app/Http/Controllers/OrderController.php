@@ -47,6 +47,22 @@ class OrderController extends Controller
         ], 200);
     }
 
+    public function show($id) {
+        $order = Order::find($id);
+        if ($order) {
+            return response()->json([
+                "status" => true,
+                "message" => "Berhasil memuat pesanan",
+                "body" => $order->getData(),
+            ], 200);
+        }
+        return response()->json([
+            "status" => false,
+            "message" => "Pesanan tidak ditemukan",
+            "body" => [],
+        ], 404);
+    }
+
     public function store() {
         $order = Order::create([
             "user_id" => Auth::user()->id,
@@ -202,25 +218,32 @@ class OrderController extends Controller
         }
         $order = Order::find($id);
         if ($order) {
-            $menu = Menu::find($request->menu_id);
-            if ($menu) {
-                $oi = OrderItem::create([
-                    "menu_id" => $menu->id,
-                    "qty" => $request->qty,
-                    "order_id" => $order->id,
-                    "status" => 0,
-                ]);
+            if (!$order->isDone()) {
+                $menu = Menu::find($request->menu_id);
+                if ($menu) {
+                    $oi = OrderItem::create([
+                        "menu_id" => $menu->id,
+                        "qty" => $request->qty,
+                        "order_id" => $order->id,
+                        "status" => 0,
+                    ]);
+                    return response()->json([
+                        "status" => true,
+                        "message" => "Berhasil menambahkan item",
+                        "body" => $oi,
+                    ], 200);
+                }
                 return response()->json([
-                    "status" => true,
-                    "message" => "Berhasil menambahkan item",
-                    "body" => $oi,
-                ], 200);
+                    "status" => false,
+                    "message" => "Menu tidak ditemukan",
+                    "body" => [],
+                ], 404);
             }
             return response()->json([
                 "status" => false,
-                "message" => "Menu tidak ditemukan",
+                "message" => "Pesanan sudah tidak berlaku",
                 "body" => [],
-            ], 404);
+            ], 419);
         }
         return response()->json([
             "status" => false,
@@ -243,31 +266,38 @@ class OrderController extends Controller
         }
         $order = Order::find($id);
         if ($order) {
-            $oi = OrderItem::find($item_id);
-            if ($oi) {
-                if ($request->qty == 0) {
-                    $oi->delete();
-                    return response()->json([
-                        "status" => true,
-                        "message" => "Berhasil menghapus item",
-                        "body" => [],
-                    ], 200);
-                }else {
-                    $oi->update([
-                        "qty" => $request->qty,
-                    ]);
-                    return response()->json([
-                        "status" => true,
-                        "message" => "Berhasil mengubah item",
-                        "body" => $oi,
-                    ], 200);
+            if (!$order->isDone()) {
+                $oi = OrderItem::find($item_id);
+                if ($oi) {
+                    if ($request->qty == 0) {
+                        $oi->delete();
+                        return response()->json([
+                            "status" => true,
+                            "message" => "Berhasil menghapus item",
+                            "body" => [],
+                        ], 200);
+                    }else {
+                        $oi->update([
+                            "qty" => $request->qty,
+                        ]);
+                        return response()->json([
+                            "status" => true,
+                            "message" => "Berhasil mengubah item",
+                            "body" => $oi,
+                        ], 200);
+                    }
                 }
+                return response()->json([
+                    "status" => false,
+                    "message" => "Item tidak ditemukan",
+                    "body" => [],
+                ], 404);
             }
             return response()->json([
                 "status" => false,
-                "message" => "Item tidak ditemukan",
+                "message" => "Pesanan sudah tidak berlaku",
                 "body" => [],
-            ], 404);
+            ], 419);
         }
         return response()->json([
             "status" => false,
@@ -290,22 +320,29 @@ class OrderController extends Controller
         }
         $order = Order::find($id);
         if ($order) {
-            $oi = OrderItem::find($item_id);
-            if ($oi) {
-                $oi->update([
-                    "status" => $request->status,
-                ]);
+            if (!$order->isDone()) {
+                $oi = OrderItem::find($item_id);
+                if ($oi) {
+                    $oi->update([
+                        "status" => $request->status,
+                    ]);
+                    return response()->json([
+                        "status" => true,
+                        "message" => "Berhasil mengubah item",
+                        "body" => $oi,
+                    ], 200);
+                }
                 return response()->json([
-                    "status" => true,
-                    "message" => "Berhasil mengubah item",
-                    "body" => $oi,
-                ], 200);
+                    "status" => false,
+                    "message" => "Item tidak ditemukan",
+                    "body" => [],
+                ], 404);
             }
             return response()->json([
                 "status" => false,
-                "message" => "Item tidak ditemukan",
+                "message" => "Pesanan sudah tidak berlaku",
                 "body" => [],
-            ], 404);
+            ], 419);
         }
         return response()->json([
             "status" => false,
@@ -318,19 +355,26 @@ class OrderController extends Controller
         $order = Order::find($id);
         if ($order) {
             $oi = OrderItem::find($item_id);
-            if ($oi) {
-                $oi->delete();
+            if (!$order->isDone()) {
+                if ($oi) {
+                    $oi->delete();
+                    return response()->json([
+                        "status" => true,
+                        "message" => "Berhasil menghapus item",
+                        "body" => [],
+                    ], 200);
+                }
                 return response()->json([
-                    "status" => true,
-                    "message" => "Berhasil menghapus item",
+                    "status" => false,
+                    "message" => "Item tidak ditemukan",
                     "body" => [],
-                ], 200);
+                ], 404);
             }
             return response()->json([
                 "status" => false,
-                "message" => "Item tidak ditemukan",
+                "message" => "Pesanan sudah tidak berlaku",
                 "body" => [],
-            ], 404);
+            ], 419);
         }
         return response()->json([
             "status" => false,
@@ -355,12 +399,11 @@ class OrderController extends Controller
                     $item->total = (int) $item->price * (int) $item->quantity;
                     $total += $item->total;
                 }
-                $user = User::find($order->user_id);
                 
                 $data = [
                     "items" => $items,
                     "total" => $total,
-                    "waiter" => $user->username,
+                    "waiter" => $order->user->username,
                 ];
                 if ($order->isTakeAway()) {
                     $data['costumer'] = $order->costumer->name;
@@ -374,7 +417,7 @@ class OrderController extends Controller
                 return response()->json([
                     "status" => true,
                     "message" => "Berhasil di simpan",
-                    "body" => $order,
+                    "body" => $order->getData(),
                 ], 200);
             }
 

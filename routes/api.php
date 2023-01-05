@@ -33,7 +33,7 @@ Route::get('init', [Controller::class, 'init']);
 Route::prefix('auth')->group(function() {
 
     // Api untuk register
-    Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+    // Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 
     // Api untuk login
     Route::post('login', [AuthController::class, 'login'])->name('auth.login');
@@ -177,7 +177,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
         Route::get('/', [OrderController::class, 'index']);
 
         // Melihat detail pesanan
-        // Route::get('/{id}', [OrderController::class, 'show']);
+        Route::get('/{id}', [OrderController::class, 'show']);
 
         // Menambah pesanan
         Route::post('/dine_in', [OrderController::class, 'createDineInOrder']);

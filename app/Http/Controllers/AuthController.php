@@ -11,34 +11,34 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function register(Request $request) {
-        $val = Validator::make($request->all(), [
-            "username" => "required|unique:users,username",
-            "password" => "required",
-            "confirm_password" => "required|same:password",
-            "role_id" => "required|exists:roles,id",
-        ]);
+    // public function register(Request $request) {
+    //     $val = Validator::make($request->all(), [
+    //         "username" => "required|unique:users,username",
+    //         "password" => "required",
+    //         "confirm_password" => "required|same:password",
+    //         "role_id" => "required|exists:roles,id",
+    //     ]);
 
-        if ($val->fails()) {
-            return response()->json([
-                "status" => false,
-                "message" => "Invalid field",
-                "body" => $val->errors(),
-            ], 400);
-        }
+    //     if ($val->fails()) {
+    //         return response()->json([
+    //             "status" => false,
+    //             "message" => "Invalid field",
+    //             "body" => $val->errors(),
+    //         ], 400);
+    //     }
 
-        $user = User::create([
-            "username" => strtolower($request->username),
-            "password" => Hash::make($request->password),
-            "role_id" => $request->role_id,
-        ]);
+    //     $user = User::create([
+    //         "username" => strtolower($request->username),
+    //         "password" => Hash::make($request->password),
+    //         "role_id" => $request->role_id,
+    //     ]);
 
-        return response()->json([
-            "status" => true,
-            "message" => "User successfully created",
-            "body" => $user->toArray(),
-        ], 200);
-    }
+    //     return response()->json([
+    //         "status" => true,
+    //         "message" => "User successfully created",
+    //         "body" => $user->toArray(),
+    //     ], 200);
+    // }
 
     public function login(Request $request) {
         $val = Validator::make($request->all(), 
@@ -54,6 +54,7 @@ class AuthController extends Controller
                 'body' => $val->errors()
             ], 400);
         }
+        
         if(!Auth::attempt($request->only(['username', 'password']))){
             return response()->json([
                 "status" => false,

@@ -33,6 +33,8 @@ class Order extends Model
             $this->reserved_table = $table;
         }
         $this->isTakeAway = $ita;
+        $this->user = User::find($this->user_id);
+        unset($this->user_id);
         $this->items = OrderItem::where('order_id', $this->id)
         ->join('menu', 'menu.id', '=', 'order_items.menu_id')
         ->select('order_items.id as item_id', 'menu.name', 'menu.image', 'menu.id', 'order_items.qty', 'menu.price', 'order_items.status')
