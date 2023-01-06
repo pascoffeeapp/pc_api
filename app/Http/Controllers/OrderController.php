@@ -207,7 +207,7 @@ class OrderController extends Controller
     public function addItem(Request $request, $id) {
         $val = Validator::make($request->all(), [
             "menu_id" => "required",
-            "qty" => "required|numeric|min:1",
+            "qty" => "required|numeric",
         ]);
         if ($val->fails()) {
             return response()->json([
@@ -221,12 +221,23 @@ class OrderController extends Controller
             if (!$order->isDone()) {
                 $menu = Menu::find($request->menu_id);
                 if ($menu) {
-                    $oi = OrderItem::create([
-                        "menu_id" => $menu->id,
-                        "qty" => $request->qty,
-                        "order_id" => $order->id,
-                        "status" => 0,
-                    ]);
+                    $oi = OrderItem::where('menu_id', $menu->id)->where('order_id', $order->id)->first();
+                    
+                    if (!$oi) {
+                        $oi = OrderItem::create([
+                            "menu_id" => $menu->id,
+                            "qty" => $request->qty,
+                            "order_id" => $order->id,
+                            "status" => 0,
+                        ]);
+                    }else {
+                        $oi->update([
+                            "qty" => (int)$request->qty,
+                        ]);
+                    }
+                    $oi = OrderItem::where('menu_id', $menu->id)->where('order_id', $order->id)
+                    ->join('menu', 'menu.id', '=', 'order_items.menu_id')
+                    ->select('order_items.id as item_id', 'menu.name', 'menu.image', 'menu.id', 'order_items.qty', 'menu.price', 'order_items.status')->first();
                     return response()->json([
                         "status" => true,
                         "message" => "Berhasil menambahkan item",
